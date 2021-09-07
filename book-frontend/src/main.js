@@ -2,15 +2,18 @@ import Vue from 'vue'
 import App from './App.vue'
 import Router from 'vue-router'
 
+import lodash from 'lodash'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import routes from './router'
+import store from './store'
 
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 Vue.use(Router)
+Vue.use(lodash)
 
 const router = new Router({
   mode: 'history',
@@ -23,6 +26,7 @@ Router.prototype.push = function push(location) {
 }
 new Vue({
   router,
+  store,
   render: (h) => h(App),
 }).$mount('#app')
 export { router }

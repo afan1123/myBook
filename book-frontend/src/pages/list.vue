@@ -75,7 +75,12 @@
     </el-aside>
     <el-container>
       <el-header style="text-align:left;margin-left:50px">
-        <el-button type="primary" size="small" icon="el-icon-plus">
+        <el-button
+          type="primary"
+          size="small"
+          icon="el-icon-plus"
+          @click="toAdd"
+        >
           添加成员
         </el-button>
         <el-button type="default" size="small" icon="el-icon-edit">
@@ -96,6 +101,19 @@
           <el-table-column prop="name" label="姓名" width="180">
           </el-table-column>
           <el-table-column prop="address" label="地址"> </el-table-column>
+          <el-table-column fixed="right" label="操作" width="100">
+            <template slot-scope="scope">
+              <el-button
+                @click="handleClick(scope.row)"
+                type="text"
+                size="small"
+                >查看</el-button
+              >
+              <el-button type="text" size="small" @click="toEdit(scope.row)"
+                >编辑</el-button
+              >
+            </template>
+          </el-table-column>
         </el-table>
         <!-- <el-pagination
           style="text-align:right;margin-top:20px"
@@ -111,6 +129,8 @@
 
 <script>
 import { cloneDeep } from 'lodash'
+import { staff } from '../services/index'
+import data from '../data/index.json'
 const SEARCH_STATE = {
   INIT_STATE: 0,
   SEARCH_STATE: 1,
@@ -157,104 +177,36 @@ export default {
         },
       ],
       sectorTreeCopy: [],
-      sectorTree: [
-        {
-          label: '一级 1',
-          children: [
-            {
-              label: '二级 1-1',
-              children: [
-                {
-                  label: '三级 1-1-1',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: '一级 2',
-          children: [
-            {
-              label: '二级 2-1',
-              children: [
-                {
-                  label: '三级 2-1-1',
-                },
-              ],
-            },
-            {
-              label: '二级 2-2',
-              children: [
-                {
-                  label: '三级 2-2-1',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: '一级 3',
-          children: [
-            {
-              label: '二级 3-1',
-              children: [
-                {
-                  label: '三级 3-1-1',
-                },
-              ],
-            },
-            {
-              label: '二级 3-2',
-              children: [
-                {
-                  label: '三级 3-2-1',
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      sectorTree: data.sectors,
       defaultProps: {
         children: 'children',
         label: 'label',
       },
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-        },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄',
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄',
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
-        },
-      ],
+      tableData: data.staffs,
       tableDataCopy: [],
     }
   },
   computed: {},
   methods: {
-    init() {
+    async init() {
       this.getSectorTree()
-      this.getList()
+      await this.getList()
     },
-    getList() {
+    async getList() {
       this.staffListLoading = true
+      let res = await staff.fetchStaff()
+
+      console.log(res)
       setTimeout(() => {
         this.tableDataCopy = cloneDeep(this.tableData)
         this.staffListLoading = false
       }, 2000)
+    },
+    toEdit(row) {
+      this.$router.push({ name: 'staff-edit', params: { id: row.id } })
+    },
+    toAdd() {
+      this.$router.push({ name: 'staff-add' })
     },
     getSectorTree() {
       this.sectorTreeLoading = true

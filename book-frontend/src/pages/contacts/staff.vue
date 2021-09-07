@@ -1,6 +1,5 @@
 <template>
   <h1>
-    staff
     <router-view></router-view>
   </h1>
 </template>

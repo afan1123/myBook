@@ -1,10 +1,13 @@
-import List from '../pages/list.vue'
-import Index from '../pages/index.vue'
-import Home from '../pages/home.vue'
-import Login from '../pages/login.vue'
-import Register from '../pages/register.vue'
-import Staff from '../pages/staff.vue'
-import Detail from '../pages/detail.vue'
+const List = () => import('../pages/list.vue')
+const Index = () => import('../pages/index.vue')
+const Home = () => import('../pages/home.vue')
+const Login = () => import('../pages/login.vue')
+const Register = () => import('../pages/register.vue')
+const Staff = () => import('../pages/contacts/staff.vue')
+const Contacts = () => import('../pages/contacts/contacts.vue')
+const Edit = () => import('../pages/contacts/edit.vue')
+const Add = () => import('../pages/contacts/add.vue')
+// const Detail = () => import('../pages/contacts/detail.vue')
 
 const routes = [
   {
@@ -16,7 +19,7 @@ const routes = [
     },
     children: [
       {
-        path: '/',
+        path: '',
         redirect: 'home',
       },
       {
@@ -36,23 +39,52 @@ const routes = [
         },
       },
       {
-        path: 'staff',
-        name: 'staff',
-        component: Staff,
-        meta: { title: '职工' },
+        path: 'contacts',
+        name: 'contacts',
+        meta: { title: '通讯录' },
         children: [
+          { path: '', redirect: 'staff' },
           {
-            path: 'detail',
-            name: 'detail',
-            component: Detail,
-            meta: { title: '详情' },
+            path: 'staff',
+            name: 'staff',
+            component: Staff,
+            meta: { title: '职员' },
+            children: [
+              {
+                path: '',
+                redirect: 'staff-list',
+              },
+              {
+                path: 'staff-list',
+                name: 'staff-list',
+                component: List,
+                meta: { title: '职员列表' },
+              },
+              {
+                path: ':id/staff-edit',
+                name: 'staff-edit',
+                component: Edit,
+                meta: {
+                  title: '职员编辑',
+                },
+              },
+              {
+                path: 'staff-add',
+                name: 'staff-add',
+                component: Add,
+                meta: {
+                  title: '添加职员',
+                },
+              },
+            ],
           },
         ],
+        component: Contacts,
       },
     ],
   },
   {
-    path: 'login',
+    path: '/login',
     name: 'login',
     component: Login,
     children: [
