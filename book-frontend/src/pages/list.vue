@@ -194,13 +194,13 @@ export default {
     },
     async getList() {
       this.staffListLoading = true
-      let res = await staff.fetchStaff()
-
-      console.log(res)
-      setTimeout(() => {
+      try {
+        this.tableData = await staff.fetchStaff()
         this.tableDataCopy = cloneDeep(this.tableData)
         this.staffListLoading = false
-      }, 2000)
+      } catch (error) {
+        console.log(error)
+      }
     },
     toEdit(row) {
       this.$router.push({ name: 'staff-edit', params: { id: row.id } })

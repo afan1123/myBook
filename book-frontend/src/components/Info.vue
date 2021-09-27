@@ -18,10 +18,13 @@
 import '../style/index.less'
 import { staff } from '../services/index'
 export default {
+  data() {
+    return {}
+  },
   methods: {
     async save() {
       try {
-        let res = await staff.fetchStaff()
+        let res = await staff.modifyStaff()
         console.log(res)
       } catch (error) {
         console.log(error)

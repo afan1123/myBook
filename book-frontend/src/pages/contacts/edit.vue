@@ -52,6 +52,7 @@
 <script>
 import data from '../../data/index.json'
 import { cloneDeep } from 'lodash'
+import { staff } from '../../services'
 export default {
   data() {
     const validateAge = (rule, value, callback) => {
@@ -104,9 +105,17 @@ export default {
     edit() {
       this.disabled = false
     },
+    async submitStaff() {
+      try {
+        await staff.modifyStaff(this.form)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     save(formName = null) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.submitStaff()
           this.formCopy = cloneDeep(this.form)
           this.$refs[formName].resetFields()
           this.disabled = true
